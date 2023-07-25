@@ -1,0 +1,27 @@
+<div class="game-container">
+  <ng-container *ngIf="currentQuest$ | async as currentQuest">
+    <h1>ChronoQuest - {{ currentQuest.era }}</h1>
+    <p>{{ currentQuest.challenge }}</p>
+    <p>Quest {{ currentQuestIndex + 1 }} of {{ totalQuests + 1 }}</p>
+    <div class="hieroglyphs-container">
+      <img src="../../assets/eras/{{currentQuest.img}}.png" alt="Hieroglyphs">
+      <button class="decipher-button" (click)="decipherHieroglyphs()">Decipher</button>
+    </div>
+    <div class="options-container">
+      <!-- List of options for the player to choose -->
+      <button
+        *ngFor="let option of currentQuest.options"
+        (click)="submitOption(option)"
+        [class.correct-option]="isCorrectOption$.getValue() === true"
+        [class.incorrect-option]="isCorrectOption$.getValue() === false"
+        [disabled]="isCorrectOption$.getValue() !== null"
+      >
+        {{ option }}
+      </button>
+    </div>
+    <div class="feedback-container" *ngIf="isCorrectOption$.getValue() === true">
+      <p>{{ currentQuest.feedback }}</p>
+    </div>
+  </ng-container>
+  <p *ngIf="!(currentQuest$ | async)">Congratulations! You completed all the quests!</p>
+</div>
